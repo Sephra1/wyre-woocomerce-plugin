@@ -6,10 +6,10 @@
  * @author      iongraphix
  *
  * @wordpress-plugin
- * Plugin Name: WyrePay WooCommerce
- * Plugin URI:  https://wordpress.org/plugins/woo-wyrepay/
- * Description: WyrePay plugin for WooCommerce.
- * Version:     1.1.0
+ * Plugin Name: Wyre WooCommerce
+ * Plugin URI:  https://github.com/Wyre-Tech-Group/wyre-woocomerce-plugin
+ * Description: Wyre plugin for WooCommerce.
+ * Version:     1.0.0
  * Author:      iongraphix
  * Author URI:  https://wyre.tech
  * Text Domain: woo-wyrepay 
