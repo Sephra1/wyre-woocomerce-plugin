@@ -14,7 +14,8 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         $this->icon 				= apply_filters('wpwoo_wyrepay_icon', plugins_url( 'assets/pay-via-wyrepay.png' , WPWOO_WYREPAY_BASE ) );
         $this->has_fields 			= true;
         $this->order_button_text 	= 'Make Payment';
-        $this->url 		         	= 'https://api.wyre.tech/extern/';
+        $this->url 		         	= 'https://e-order.wyre.tech/sysapi/';
+        $this->url_eorder 		    = 'https://e-order.wyre.tech/';
         $this->notify_url        	= WC()->api_request_url( 'WPWOO_Wyrepay_Plugin' );
         $this->method_title     	= 'Wyre';
         $this->method_description  	= 'Wyre provide services for to accept online payments from local and international customers using Mastercard, Visa, Verve Cards and other payment options';
@@ -119,7 +120,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
         wp_enqueue_script( 'jquery' );
 
-        wp_enqueue_script( 'wpwoo_wyrepay', $this->url.'js/wyrepay.js', array( 'jquery' ));
+        wp_enqueue_script( 'wpwoo_wyrepay', $this->url_eorder.'js/wyre.js', array( 'jquery' ));
         wp_enqueue_script( 'wpwoo_wyrepay_inline', plugins_url( 'assets/woo-wyrepay.js', WPWOO_WYREPAY_BASE ), array( 'jquery', 'wpwoo_wyrepay' ));
 
     }
@@ -251,7 +252,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
        $order = wc_get_order( $order_id );
 
         $wyrepay_args = $this->get_wyrepay_args( $order );
-        $wyrepay_redirect  = $this->url.'?p=linkToken&';
+        $wyrepay_redirect  = $this->url."test?";
         $wyrepay_redirect .= http_build_query( $wyrepay_args );
 
         $args = array(
@@ -259,17 +260,15 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         );
 
         $request = wp_remote_get( $wyrepay_redirect, $args );
-        
         $valid_url = strpos( $request['body'], $this->url.'pay' );
 
-        if ( ! is_wp_error( $request ) &&  $valid_url !== false ) {
+        if ( ! is_wp_error( $request )) {
+            wc_add_notice( "See body ".$request['body'], 'error' );
+            error_log("See body: ".$request['body']);
+
             $redirect_url=$request['body'];
-
-            if($this->method=='inline'){
-                $bnl=array_pop(explode('/',$redirect_url));
-                $redirect_url=$order->get_checkout_payment_url( true ).'&bnl='.$bnl;
-            }
-
+            $bnl=array_pop(explode('/',$redirect_url));
+            $redirect_url=$order->get_checkout_payment_url( true ).'&bnl='.$bnl;
             $response = array(
                 'result'	=> 'success',
                 'redirect'	=> $redirect_url
@@ -280,15 +279,13 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             //Check response for response error codes 
             $s2s_code=trim($request['body']);
             if(is_numeric($s2s_code)) return $s2s_code;
-             
-           
+            error_log("Error: ".$request['body']);
             //Attempt method 2 submission
             $redirect_url=$order->get_checkout_payment_url( true ).'&vpm2';
             $response = array(
                 'result'	=> 'success',
                 'redirect'	=> $redirect_url
             );
-
         }
 
         return $response;
@@ -300,9 +297,11 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
     public function receipt_page( $order_id ) {
  
         $order = wc_get_order( $order_id );
-        
+        error_log("Checkout the GET array ".$_GET);
+
         if(isset($_GET['vpm2']))
         {
+            error_log("VPM2 Won!  See ".$_GET['vpm2']);
             $wyrepay_args = $this->get_wyrepay_args( $order );
             ?>
             
@@ -318,7 +317,8 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             <?php
              
         }else{
-         
+            
+            error_log("BNL Won!  See ".$_GET['bnl']);
             $url=$this->url.'pay/bnlink/'.sanitize_text_field($_GET['bnl']);
     
             echo '<p>Thank you for your order, please click the '.$this->order_button_text.' button below to proceed.</p>';
