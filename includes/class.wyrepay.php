@@ -297,7 +297,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         if(isset($_GET['e_order']))
         {
             
-            $url=$this->url.'pay/i/'.sanitize_text_field($_GET['e_order']);
+            $url=$this->url_eorder.'pay/i/'.sanitize_text_field($_GET['e_order']);
             echo '<p>Thank you for your order, please click the '.$this->order_button_text.' button below to proceed.</p>';
             echo '<div>
                     <form id="order_review" method="post" action="'. WC()->api_request_url( 'WPWOO_Wyrepay_Plugin' ) .'"></form>
