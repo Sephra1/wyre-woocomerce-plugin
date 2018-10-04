@@ -192,7 +192,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
      * Admin Panel Options
      */
     public function admin_options() { ?>
-        <h2>Wyrepay
+        <h2>Wyre Settings
             <?php
             if ( function_exists( 'wc_back_link' ) ) {
                 wc_back_link( 'Return to payments', admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
@@ -267,13 +267,12 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             error_log("See body: ".$request['body']);
 
             $redirect_url=$request['body'];
-            $bnl=array_pop(explode('/',$redirect_url));
-            $redirect_url=$order->get_checkout_payment_url( true ).'&bnl='.$bnl;
+            $e_order=array_pop(explode('/',$redirect_url));
+            $redirect_url=$order->get_checkout_payment_url( true ).'&e_order='.$bnl;
             $response = array(
                 'result'	=> 'success',
                 'redirect'	=> $redirect_url
             );
-
         } else {
              
             //Check response for response error codes 
@@ -281,10 +280,10 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             if(is_numeric($s2s_code)) return $s2s_code;
             error_log("Error: ".$request['body']);
             //Attempt method 2 submission
-            $redirect_url=$order->get_checkout_payment_url( true ).'&vpm2';
+            // $redirect_url=$order->get_checkout_payment_url( true ).'&vpm2';
             $response = array(
-                'result'	=> 'success',
-                'redirect'	=> $redirect_url
+                'result'	=> 'fail',
+                'redirect'	=> ''
             );
         }
 
@@ -299,35 +298,23 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         $order = wc_get_order( $order_id );
         error_log("Checkout the GET array ".$_GET);
 
-        if(isset($_GET['vpm2']))
+        if(isset($_GET['e_order']))
         {
-            error_log("VPM2 Won!  See ".$_GET['vpm2']);
-            $wyrepay_args = $this->get_wyrepay_args( $order );
-            ?>
             
-               <form id="vpm2_form" method="post" action="<?php echo $this->url; ?>pay">
-                <?php foreach ($wyrepay_args as $key=>$val){ ?>
-                  <input type="hidden" name="<?php echo $key; ?>" value="<?php echo $val; ?>" />
-                <?php } ?>
-               </form>
-                <button class="button alt" onclick="document.getElementById('vpm2_form').submit();"><?php echo $this->order_button_text; ?></button> 
-                <a class="button cancel" href="<?php echo esc_url( $order->get_cancel_order_url() ); ?>">Cancel order</a>
-              
-            
-            <?php
-             
-        }else{
-            
-            error_log("BNL Won!  See ".$_GET['bnl']);
-            $url=$this->url.'pay/bnlink/'.sanitize_text_field($_GET['bnl']);
-    
+            $url=$this->url.'pay/i/'.sanitize_text_field($_GET['e_order']);
             echo '<p>Thank you for your order, please click the '.$this->order_button_text.' button below to proceed.</p>';
-    
             echo '<div>
                     <form id="order_review" method="post" action="'. WC()->api_request_url( 'WPWOO_Wyrepay_Plugin' ) .'"></form>
                     <button class="button alt" onclick="vp_inline(\''.$url.'\',\''.((strlen($this->inline_text)>0)?$this->inline_text:"").'\',\''.$order->get_cancel_order_url().'\',\''.$this->get_return_url( $order ).'\')">'.$this->order_button_text.'</button> 
                     <a class="button cancel" href="' . esc_url( $order->get_cancel_order_url() ) . '">Cancel order</a>
                   </div>';
+        }
+        else
+        {
+            wc_add_notice( "Unable to complete payment", 'error' );
+            ?>
+            <a class="button cancel" href="<?php echo esc_url( $order->get_cancel_order_url() ); ?>">Cancel order</a>
+            <?php
         }
     }
 
@@ -450,7 +437,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
                 $transaction_id = $transaction['transaction_id'];
 
                 //Add Admin Order Note
-                $order->add_order_note($message.'<br />Wyrepay Transaction ID: '.$transaction_id.'<br/>Reason: '.$transaction['response_message']);
+                $order->add_order_note($message.'<br />Wyre Transaction ID: '.$transaction_id.'<br/>Reason: '.$transaction['response_message']);
 
                 //Update the order status
                 $order->update_status( 'failed', '' );
