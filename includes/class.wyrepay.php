@@ -249,23 +249,17 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
      * Get Wyrepay payment link [TODO]
      **/
     public function get_payment_link( $order_id ) {
-       $order = wc_get_order( $order_id );
-
+        $order = wc_get_order( $order_id );
         $wyrepay_args = $this->get_wyrepay_args( $order );
         $wyrepay_redirect  = $this->url."test";
         // $wyrepay_redirect .= http_build_query( $wyrepay_args );
 
-        // $request = wp_remote_post( $wyrepay_redirect, $wyrepay_args );
-
         $request = wp_remote_post($wyrepay_redirect, array(
-            'headers'     => array('Content-Type' => 'application/json; charset=utf-8'),
-            'body'        => json_encode($wyrepay_args),
-            'method'      => 'POST',
-            'data_format' => 'body',
+            'body' => $wyrepay_args
         ));
 
         if ( ! is_wp_error( $request )) {
-            wc_add_notice( "See body ".$request['body'], 'error' );
+            wc_add_notice( "See body ".$request['body'], 'notice' );
 
             $redirect_url=$request['body'];
             $e_order=array_pop(explode('/',$redirect_url));
