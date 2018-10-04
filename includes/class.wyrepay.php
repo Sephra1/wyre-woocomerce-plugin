@@ -120,7 +120,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
         wp_enqueue_script( 'jquery' );
 
-        wp_enqueue_script( 'wpwoo_wyrepay', $this->url_eorder.'js/wyre.js', array( 'jquery' ));
+        wp_enqueue_script( 'wpwoo_wyrepay', $this->url_eorder.'woo/js/wyre.js', array( 'jquery' ));
         wp_enqueue_script( 'wpwoo_wyrepay_inline', plugins_url( 'assets/woo-wyrepay.js', WPWOO_WYREPAY_BASE ), array( 'jquery', 'wpwoo_wyrepay' ));
 
     }
