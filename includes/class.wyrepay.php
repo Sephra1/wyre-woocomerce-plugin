@@ -252,14 +252,10 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
        $order = wc_get_order( $order_id );
 
         $wyrepay_args = $this->get_wyrepay_args( $order );
-        $wyrepay_redirect  = $this->url."test?";
-        $wyrepay_redirect .= http_build_query( $wyrepay_args );
+        $wyrepay_redirect  = $this->url."test";
+        // $wyrepay_redirect .= http_build_query( $wyrepay_args );
 
-        $args = array(
-            'timeout'   => 60
-        );
-
-        $request = wp_remote_post( $wyrepay_redirect, $args );
+        $request = wp_remote_post( $wyrepay_redirect, $wyrepay_args );
 
         if ( ! is_wp_error( $request )) {
             wc_add_notice( "See body ".$request['body'], 'error' );
