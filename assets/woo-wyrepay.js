@@ -1,28 +1,28 @@
-var rd_url;
 var processed=0;
 
-var functionobj=function () {
+var return_url;
+var func_return_obj=function () {
      processed=1;
       setTimeout(function(){
-         window.location=rd_url;
+         window.location=return_url;
        },5000);
   }
 
-var cn_url;
-  var x_functionobj=function () {
+var cancel_url;
+  var func_cancel_obj=function () {
     if(!processed){
-       window.location=cn_url;
+       window.location=cancel_url;
    }
 }
 
-  function vp_inline(url,text,cancel,txurl) {
-        var obj={};
-        obj.url=url;
-        rd_url=txurl;
-        cn_url=cancel;
-         obj.closed=x_functionobj;
-        obj.success=obj.failed=functionobj;
-        if(text.trim().length>0) obj.loadText=text;
-        Wyrepay.link(obj);
-   }
-
+function wp_inline(url,cancel,txurl) {
+      var obj={};
+      obj.url=url;
+      return_url=txurl;
+      cancel_url=cancel;
+      obj.closed=func_cancel_obj;
+      obj.success=obj.failed=func_return_obj;
+      console.log("Start modal engine with "+obj);
+      console.dir(obj);
+      Wyre.pay(obj);
+}

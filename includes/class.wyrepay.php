@@ -233,8 +233,8 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
         } else {
 
-            if($response==-1||$response==-4) wc_add_notice( "Invalid configuration, confirm your merchant ID", 'error' );
-            else if($response==-3||$response==-14) wc_add_notice( "Merchant ID is incorrect", 'error' );
+            if($response==-1||$response==-4) wc_add_notice( "Invalid configuration, confirm your merchant API Key", 'error' );
+            else if($response==-3||$response==-14) wc_add_notice( "Merchant API Key is incorrect", 'error' );
             else wc_add_notice( "Unable to complete payment request", 'error' );
            
             return array(
@@ -268,7 +268,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
             $redirect_url=$request['body'];
             $e_order=array_pop(explode('/',$redirect_url));
-            $redirect_url=$order->get_checkout_payment_url( true ).'&e_order='.$bnl;
+            $redirect_url=$order->get_checkout_payment_url( true ).'&e_order='.$e_order;
             $response = array(
                 'result'	=> 'success',
                 'redirect'	=> $redirect_url
@@ -278,9 +278,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             //Check response for response error codes 
             $s2s_code=trim($request['body']);
             if(is_numeric($s2s_code)) return $s2s_code;
-            error_log("Error: ".$request['body']);
-            //Attempt method 2 submission
-            // $redirect_url=$order->get_checkout_payment_url( true ).'&vpm2';
+
             $response = array(
                 'result'	=> 'fail',
                 'redirect'	=> ''
@@ -305,7 +303,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             echo '<p>Thank you for your order, please click the '.$this->order_button_text.' button below to proceed.</p>';
             echo '<div>
                     <form id="order_review" method="post" action="'. WC()->api_request_url( 'WPWOO_Wyrepay_Plugin' ) .'"></form>
-                    <button class="button alt" onclick="vp_inline(\''.$url.'\',\''.((strlen($this->inline_text)>0)?$this->inline_text:"").'\',\''.$order->get_cancel_order_url().'\',\''.$this->get_return_url( $order ).'\')">'.$this->order_button_text.'</button> 
+                    <button class="button alt" onclick="wp_inline(\''.$url.'\',\''.$order->get_cancel_order_url().'\',\''.$this->get_return_url( $order ).'\')">'.$this->order_button_text.'</button> 
                     <a class="button cancel" href="' . esc_url( $order->get_cancel_order_url() ) . '">Cancel order</a>
                   </div>';
         }
