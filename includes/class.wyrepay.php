@@ -18,7 +18,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         $this->url_eorder 		    = 'https://e-order.wyre.tech/';
         $this->notify_url        	= WC()->api_request_url( 'WPWOO_Wyrepay_Plugin' );
         $this->method_title     	= 'Wyre';
-        $this->method_description  	= 'Wyre provide services for to accept online payments from local and international customers using Mastercard, Visa, Verve Cards and other payment options';
+        $this->method_description  	= 'Accept Mobile Money and Debit card payment directly on your store with the Wyre Tech payment gateway for WooCommerce.';
 
         // Load the form fields.
         $this->init_form_fields();
