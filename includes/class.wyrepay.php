@@ -198,7 +198,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
      * Admin Panel Options
      */
     public function admin_options() { ?>
-        <h2>Wyre Settings <a href="https://wtp.cash/dash" style="
+        <h2>Wyre Settings <a href="https://my.wyre.tech/settings" style="
     line-height: 0;
     background: white;
     padding: 8px;
