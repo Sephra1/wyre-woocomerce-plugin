@@ -144,7 +144,8 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             'notify_url'			=> $this->notify_url,
             'shop_name'             => get_bloginfo('name'),
             'success_url'			=> $this->get_return_url( $order ),
-            'fail_url'				=> $this->get_return_url( $order )
+            'fail_url'				=> $this->get_return_url( $order ),
+            'order_id'              => $order_id,
         );
 
         $first_name  	= method_exists( $order, 'get_billing_first_name' ) ? $order->get_billing_first_name() : $order->billing_first_name;
@@ -263,7 +264,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         ));
 
         if ( ! is_wp_error( $request )) {
-            
+
             wc_add_notice( "Click the 'Make Payment' button to pay with Wyre", 'notice' );
             $redirect_url=$request['body'];
             $e_order=array_pop(explode('/',$redirect_url));
