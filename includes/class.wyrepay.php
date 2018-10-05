@@ -61,6 +61,13 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
                 'default'     => 'yes',
                 'desc_tip'    => true
             ),
+            'merchant_id' => array(
+                'title' 		=> 'Wyre Merchant ID',
+                'type' 			=> 'text',
+                'description' 	=> 'Enter Your Merchant ID, this can be found in you merchant balance box.' ,
+                'default' 		=> '',
+                'desc_tip'      => true
+            ),
             'api_key' => array(
                 'title' 		=> 'Wyre API Key',
                 'type' 			=> 'text',
@@ -231,8 +238,8 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
         } else {
 
-            if($response==-1||$response==-4) wc_add_notice( "Invalid configuration, confirm your merchant API Key", 'error' );
-            else if($response==-3||$response==-14) wc_add_notice( "Merchant API Key is incorrect", 'error' );
+            if($response==-2) wc_add_notice( "Invalid configuration, confirm your merchant API Key", 'error' );
+            else if($response==-1) wc_add_notice( "Merchant API Key is incorrect", 'error' );
             else wc_add_notice( "Unable to complete payment request", 'error' );
            
             return array(
@@ -256,8 +263,8 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         ));
 
         if ( ! is_wp_error( $request )) {
+            
             wc_add_notice( "Click the 'Make Payment' button to pay with Wyre", 'notice' );
-
             $redirect_url=$request['body'];
             $e_order=array_pop(explode('/',$redirect_url));
             $redirect_url=$order->get_checkout_payment_url( true ).'&e_order='.$e_order;
