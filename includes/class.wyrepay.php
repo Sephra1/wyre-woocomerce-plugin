@@ -198,7 +198,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
      * Admin Panel Options
      */
     public function admin_options() { ?>
-        <h2>Wyre Settings <a href="https://my.wyre.tech/settings" style="
+        <h2>Wyre Settings <a href="https://my.wyre.tech/settings" target="_blank" style="
     line-height: 0;
     background: white;
     padding: 8px;
@@ -208,7 +208,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
     text-decoration: none;
     font-size: 14px;
     box-shadow: 0px 0px 1px;
-">Go to Dashboard</a>
+">Open My Settings</a>
             <?php
             if ( function_exists( 'wc_back_link' ) ) {
                 wc_back_link( 'Return to payments', admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
