@@ -64,7 +64,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             'merchant_id' => array(
                 'title' 		=> 'Wyre Merchant ID',
                 'type' 			=> 'text',
-                'description' 	=> 'Enter Your Merchant ID, this can be found in you merchant balance box.' ,
+                'description' 	=> 'Enter Your Merchant ID, this can be found in your merchant balance box.' ,
                 'default' 		=> '',
                 'desc_tip'      => true
             ),

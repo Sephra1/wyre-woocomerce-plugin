@@ -67,7 +67,7 @@
     }
 
     function loadSpinner(e) {
-        void 0 == e && (e = "Loading payment interface ... Please Wait ..."), void 0 == document.getElementById("vp-fading-circle") ? (spindiv.id = "vp-fading-circle", spindiv.innerHTML = '<div id="loader" class="loader loader-default is-active" data-text="' + e + '"></div>', document.body.appendChild(spindiv)) : document.getElementById("vp-fading-circle").innerHTML = '<div id="loader" class="loader loader-default is-active" data-text="' + e + '"></div>'
+        void 0 == e && (e = "Loading payment interface ... Please Wait ..."), void 0 == document.getElementById("wp-fading-circle") ? (spindiv.id = "wp-fading-circle", spindiv.innerHTML = '<div id="loader" class="loader loader-default is-active" data-text="' + e + '"></div>', document.body.appendChild(spindiv)) : document.getElementById("wp-fading-circle").innerHTML = '<div id="loader" class="loader loader-default is-active" data-text="' + e + '"></div>'
     }
 
     function buildParamUrl(e) {
@@ -111,7 +111,7 @@
             c = document.createElement("div");
         c.id = this.params.id + "_box", c.style.cssText = "position: fixed; display:none; z-index:999999; right: 0;  bottom: 0;left: 0; top: 0;-webkit-overflow-scrolling: touch;overflow-y: scroll;", this.iframe = document.createElement("iframe"), this.iframe.setAttribute("frameBorder", "0"), this.iframe.setAttribute("allowtransparency", "true"), this.iframe.style.cssText = "z-index: " + Math.max(10 * parseInt(t), 999999) + ";display: none;background: transparent;background: rgba(0,0,0,0.005);border: 0px none transparent;overflow-x: hidden;overflow-y: hidden;visibility: hidden;margin: 0;padding: 0;width: 100%;height: 100%;", this.iframe.id = this.iframe.name = this.params.id, this.iframe.src = s, this.iframe.onerror = function() {}, c.appendChild(this.iframe), document.body.appendChild(c), this.EventListen(), window.setTimeout(function() {
             if (!config.loadComplete) {
-                var e = document.getElementById("vp-fading-circle");
+                var e = document.getElementById("wp-fading-circle");
                 void 0 == e || (e.innerHTML = ""), config.timeout = 1
             }
         }, 6e4)
@@ -123,7 +123,7 @@
                 var r = JSON.parse(r);
                 if (void 0 == r.id || r.id != e.params.id) return !1;
                 if ("loaded" == r.action && !config.timeout) {
-                    var i = document.getElementById("vp-fading-circle");
+                    var i = document.getElementById("wp-fading-circle");
                     void 0 == i || (i.innerHTML = "");
                     var n = document.getElementById(e.params.id);
                     n.style.display = "block", n.style.visibility = "visible", document.body.style.overflow = "hidden", document.getElementById(e.params.id + "_box").style.display = "block", e.iframeOpen = 1, config.loadComplete = 1
