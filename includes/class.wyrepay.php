@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
-    public $allowed_currencies=array('USD','GHS','GBP','EUR','ZAR');
+    public $allowed_currencies=array('GHS');
 
     public function __construct(){
        
@@ -119,14 +119,13 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         }
 
         wp_enqueue_script( 'jquery' );
-
         wp_enqueue_script( 'wpwoo_wyrepay', $this->url_eorder.'woo/js/wyre.js', array( 'jquery' ));
         wp_enqueue_script( 'wpwoo_wyrepay_inline', plugins_url( 'assets/woo-wyrepay.js', WPWOO_WYREPAY_BASE ), array( 'jquery', 'wpwoo_wyrepay' ));
 
     }
 
     /**
-     * Get wyrepay args
+     * Get Wyre args
      **/
     public function get_wyrepay_args( $order ) {
 
@@ -216,7 +215,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
 
     /**
-     * Process the payment and return the result [TODO]
+     * Process the payment and return the result
      **/
     public function process_payment( $order_id ) {
 
@@ -245,7 +244,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
     }
    
     /**
-     * Get Wyrepay payment link [TODO]
+     * Send order details over to Wyre
      **/
     public function get_payment_link( $order_id ) {
         $order = wc_get_order( $order_id );
