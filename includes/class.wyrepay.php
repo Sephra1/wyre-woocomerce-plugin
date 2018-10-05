@@ -198,7 +198,17 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
      * Admin Panel Options
      */
     public function admin_options() { ?>
-        <h2>Wyre Settings
+        <h2>Wyre Settings <a href="https://wtp.cash/dash" style="
+    line-height: 0;
+    background: white;
+    padding: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    box-shadow: 0px 0px 1px;
+">Go to Dashboard</a>
             <?php
             if ( function_exists( 'wc_back_link' ) ) {
                 wc_back_link( 'Return to payments', admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
