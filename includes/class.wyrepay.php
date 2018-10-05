@@ -251,14 +251,13 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         $order = wc_get_order( $order_id );
         $wyrepay_args = $this->get_wyrepay_args( $order );
         $wyrepay_redirect  = $this->url."process";
-        // $wyrepay_redirect .= http_build_query( $wyrepay_args );
 
         $request = wp_remote_post($wyrepay_redirect, array(
             'body' => $wyrepay_args
         ));
 
         if ( ! is_wp_error( $request )) {
-            wc_add_notice( "See body ".$request['body'], 'notice' );
+            wc_add_notice( "Click the 'Make Payment' button to pay with Wyre", 'notice' );
 
             $redirect_url=$request['body'];
             $e_order=array_pop(explode('/',$redirect_url));
@@ -288,7 +287,6 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
     public function receipt_page( $order_id ) {
  
         $order = wc_get_order( $order_id );
-        error_log("Checkout the GET array ".$_GET);
 
         if(isset($_GET['e_order']))
         {
@@ -303,49 +301,27 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         }
         else
         {
-            wc_add_notice( "Unable to complete payment", 'error' );
             ?>
             <a class="button cancel" href="<?php echo esc_url( $order->get_cancel_order_url() ); ?>">Cancel order</a>
             <?php
         }
     }
 
-    // Check payment callback ... [TODO]
     public function check_wyrepay_response() {
 
-        if( isset( $_POST['transaction_id'] ) ) {
+        if( isset( $_POST['transaction'] ) ) {
 
-            $transaction_id = sanitize_text_field($_POST['transaction_id']);
-
-            $args = array( 'timeout' => 60 );
-
-            if( $this->demo ) {
-
-                $json = wp_remote_get( $this->url .'?v_transaction_id='.$transaction_id.'&type=json&demo=true', $args );
-
-            } else {
-
-                $json = wp_remote_get( $this->url .'?v_transaction_id='.$transaction_id.'&type=json', $args );
-
-            }
-
-            $transaction 	= json_decode( $json['body'], true );
+            $transaction = $_POST['transaction'];
             
             foreach($transaction as $key =>$val) $transaction[$key]=sanitize_text_field($val);
             
             $transaction_id = $transaction['transaction_id'];
-            $ref_split 		= explode('-', $transaction['merchant_ref'] );
-            
-           
-            $order_id 		= (int) $ref_split[0];
-
+            $order_id 		= (int) $transaction['order_id'];
             $order 			= wc_get_order($order_id);
             $order_total	= $order->get_total();
+            $amount_paid_currency 	= $transaction['currency'];
+            $amount_paid = $transaction['amount_paid'];
 
-            $amount_paid_currency 	= $ref_split[1];
-            $amount_paid 	= $ref_split[2];
-
-          
             if( $transaction['status'] == 'Approved' ) {
 
                 if( $transaction['merchant_id'] != $this->merchant_id && $transaction['merchant_id']!='demo' ) {
@@ -383,7 +359,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
                         $message_type = 'notice';
 
                         //Add Admin Order Note
-                        $order->add_order_note('Look into this order. <br />This order is currently on hold.<br />Reason: Amount paid is less than the total order amount.<br />Amount Paid was '.$amount_paid_currency.' '.$amount_paid.' while the total order amount is '.$amount_paid_currency.' '.$order_total.'<br />Wyrepay Transaction ID: '.$transaction_id);
+                        $order->add_order_note('Look into this order. <br />This order is currently on hold.<br />Reason: Amount paid is less than the total order amount.<br />Amount Paid was '.$amount_paid_currency.' '.$amount_paid.' while the total order amount is '.$amount_paid_currency.' '.$order_total.'<br />Wyre Transaction ID: '.$transaction_id);
 
                         add_post_meta( $order_id, 'transaction_id', $transaction_id, true );
 
@@ -419,8 +395,6 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
                 update_post_meta( $order_id, 'message', $wyrepay_message );
 
-
-
             } else {
 
                 $message = 'Payment failed.';
@@ -440,9 +414,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
                 );
 
                 update_post_meta( $order_id, 'message', $wyrepay_message );
-
                 add_post_meta( $order_id, 'transaction_id', $transaction_id, true );
-
                 echo "OK";
             }
 
@@ -450,9 +422,4 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
         die();
     }
-
-    
-
-
-
 }
