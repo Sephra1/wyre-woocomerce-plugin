@@ -134,8 +134,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         $wyrepay_args = array(
             'api_key' 		        =>  $this->api_key,
             'cur' 					=> get_woocommerce_currency(),
-            'desc'					=> "Payment for Order ID:: $order_id on ". get_bloginfo('name'),
-            'merchant_ref'			=> $order_id.'-'.get_woocommerce_currency().'-'.$order->get_total(),
+            'desc'					=> "Payment for Order #$order_id on ". get_bloginfo('name'),
             'notify_url'			=> $this->notify_url,
             'shop_name'             => get_bloginfo('name'),
             'success_url'			=> $this->get_return_url( $order ),
@@ -251,7 +250,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
     public function get_payment_link( $order_id ) {
         $order = wc_get_order( $order_id );
         $wyrepay_args = $this->get_wyrepay_args( $order );
-        $wyrepay_redirect  = $this->url."test";
+        $wyrepay_redirect  = $this->url."process";
         // $wyrepay_redirect .= http_build_query( $wyrepay_args );
 
         $request = wp_remote_post($wyrepay_redirect, array(

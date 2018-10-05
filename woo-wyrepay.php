@@ -2,7 +2,7 @@
 /**
  * Plugin Name
  *
- * @package     WooWyrePay
+ * @package     WooWyre
  * @author      Wyre Technologies LLC.
  * 
  *
@@ -13,7 +13,7 @@
  * Version:     1.0.0
  * Author:      Wyre Technologies LLC.
  * Author URI:  https://wyre.tech
- * Text Domain: woo-wyrepay 
+ * Text Domain: woo-wyrepay
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */

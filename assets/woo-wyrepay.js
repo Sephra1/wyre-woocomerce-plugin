@@ -24,5 +24,5 @@ function wp_inline(url,cancel,txurl) {
       obj.success=obj.failed=func_return_obj;
       console.log("Start modal engine with "+obj);
       console.dir(obj);
-      Wyre.pay(obj);
+      Wyre.init(obj);
 }
