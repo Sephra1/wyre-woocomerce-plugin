@@ -6,7 +6,7 @@ var func_return_obj=function () {
       setTimeout(function(){
          window.location=return_url;
        },5000);
-  }
+}
 
 var cancel_url;
   var func_cancel_obj=function () {
@@ -22,7 +22,5 @@ function wp_inline(url,cancel,txurl) {
       cancel_url=cancel;
       obj.closed=func_cancel_obj;
       obj.success=obj.failed=func_return_obj;
-      console.log("Start modal engine with "+obj);
-      console.dir(obj);
       Wyre.init(obj);
 }
