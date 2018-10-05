@@ -2,7 +2,7 @@
 /**
  * Plugin Name
  *
- * @package     WooWyre
+ * @package     WyreWoo
  * @author      Wyre Technologies LLC.
  * 
  *
@@ -13,7 +13,7 @@
  * Version:     1.0.0
  * Author:      Wyre Technologies LLC.
  * Author URI:  https://wyre.tech
- * Text Domain: woo-wyrepay
+ * Text Domain: wyre-woo
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -21,41 +21,41 @@
 if ( ! defined( 'ABSPATH' ) )
     exit;
 
-define( 'WPWOO_WYREPAY_BASE', __FILE__ );
-define( 'WPWOO_WYREPAY_VERSION', '1.0.0' );
+define( 'WPWOO_WYRE_BASE', __FILE__ );
+define( 'WPWOO_WYRE_VERSION', '1.0.0' );
 
-function wpwoo_wyrepay_init()
+function wpwoo_wyre_init()
 {
     if (!class_exists('WC_Payment_Gateway')) return;
  
-    require_once dirname( __FILE__ ) . '/includes/class.wyrepay.php';
+    require_once dirname( __FILE__ ) . '/includes/class.wyre.php';
 
 }
-add_action( 'plugins_loaded', 'wpwoo_wyrepay_init', 99 );
+add_action( 'plugins_loaded', 'wpwoo_wyre_init', 99 );
 
 /**
  * Add Settings link to the plugin entry in the plugins menu
  **/
-function wpwoo_wyrepay_plugin_action_links( $links ) {
+function WPWOO_Wyre_Plugin_action_links( $links ) {
 
     $settings_link = array(
-        'settings' => '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=woo-wyrepay-plugin' ) . '" title="Wyre Settings">Settings</a>'
+        'settings' => '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wyre-woo-plugin' ) . '" title="Wyre Settings">Settings</a>'
     );
 
     return array_merge( $links, $settings_link );
 
 }
-add_filter('plugin_action_links_' . plugin_basename( __FILE__ ), 'wpwoo_wyrepay_plugin_action_links' );
+add_filter('plugin_action_links_' . plugin_basename( __FILE__ ), 'WPWOO_Wyre_Plugin_action_links' );
 
 
 /**
  * Add Wyre Gateway to WC
  **/
-function wpwoo_add_wyrepay_gateway($methods) {
-    $methods[] = 'WPWOO_Wyrepay_Plugin';
+function wpwoo_add_wyre_gateway($methods) {
+    $methods[] = 'WPWOO_Wyre_Plugin';
     return $methods;
 }
-add_filter( 'woocommerce_payment_gateways', 'wpwoo_add_wyrepay_gateway' );
+add_filter( 'woocommerce_payment_gateways', 'wpwoo_add_wyre_gateway' );
 
 
 function message() {
@@ -68,12 +68,12 @@ function message() {
 
         if( is_order_received_page() &&  ( 'wpwoo_gateway' == $payment_method ) ) {
 
-            $wyrepay_message 	= get_post_meta( $order_id, 'message', true );
+            $wyre_message 	= get_post_meta( $order_id, 'message', true );
 
-            if( ! empty( $wyrepay_message ) ) {
+            if( ! empty( $wyre_message ) ) {
 
-                $message 			= $wyrepay_message['message'];
-                $message_type 		= $wyrepay_message['message_type'];
+                $message 			= $wyre_message['message'];
+                $message_type 		= $wyre_message['message_type'];
 
                 delete_post_meta( $order_id, 'message' );
 
@@ -88,11 +88,11 @@ function message() {
 add_action( 'wp', 'message' );
 
 /**
- * Check if wyrepay settings are filled
+ * Check if wyre settings are filled
  */
 function wpwoo_admin_notices() {
 
-    $settings = get_option( 'woocommerce_woo-wyrepay-plugin_settings' );
+    $settings = get_option( 'woocommerce_wyre-woo-plugin_settings' );
 
     if ( $settings['enabled'] == 'no' ) {
         return;
@@ -100,7 +100,7 @@ function wpwoo_admin_notices() {
 
     // Check required fields
     if ( empty($settings['api_key'])) {
-        echo '<div class="error"><p>' . sprintf( 'Please enter your Wyre API Key <a href="%s">here</a> to be able to use the payment plugin.', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wyrepay-woocommerce-plugin' ) ) . '</p></div>';
+        echo '<div class="error"><p>' . sprintf( 'Please enter your Wyre API Key <a href="%s">here</a> to be able to use the payment plugin.', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wyre-woocommerce-plugin' ) ) . '</p></div>';
         return;
     }
 

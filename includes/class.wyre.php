@@ -4,19 +4,19 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
+class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
     public $allowed_currencies=array('GHS');
 
     public function __construct(){
        
-        $this->id 					= 'woo-wyrepay-plugin';
-        $this->icon 				= apply_filters('wpwoo_wyrepay_icon', plugins_url( 'assets/pay-via-wyrepay.png' , WPWOO_WYREPAY_BASE ) );
+        $this->id 					= 'wyre-woo-plugin';
+        $this->icon 				= apply_filters('wpwoo_wyre_icon', plugins_url( 'assets/pay-via-wyre.png' , WPWOO_WYRE_BASE ) );
         $this->has_fields 			= true;
         $this->order_button_text 	= 'Make Payment';
         $this->url 		         	= 'https://e-order.wyre.tech/sysapi/';
         $this->url_eorder 		    = 'https://e-order.wyre.tech/';
-        $this->notify_url        	= WC()->api_request_url( 'WPWOO_Wyrepay_Plugin' );
+        $this->notify_url        	= WC()->api_request_url( 'WPWOO_Wyre_Plugin' );
         $this->method_title     	= 'Wyre';
         $this->method_description  	= 'Accept Mobile Money and Debit card payment directly on your store with the Wyre Tech payment gateway for WooCommerce.';
 
@@ -44,7 +44,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 
         // Payment listener/API hook
-        add_action( 'woocommerce_api_wpwoo_wyrepay_plugin', array( $this, 'check_wyrepay_response' ) );
+        add_action( 'woocommerce_api_WPWOO_Wyre_Plugin', array( $this, 'check_wyre_response' ) );
     }
 
     /**
@@ -91,7 +91,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
     public function is_valid_for_use() {
 
         if( ! in_array( get_woocommerce_currency(), $this->allowed_currencies ) ) {
-            $this->msg = 'Wyrepay doesn\'t support your store currency ('.get_woocommerce_currency().'), you can update your currency <a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=wc-settings&tab=general">here</a>';
+            $this->msg = 'Wyre doesn\'t support your store currency ('.get_woocommerce_currency().'), you can update your currency <a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=wc-settings&tab=general">here</a>';
             return false;
         }
 
@@ -119,18 +119,18 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         }
 
         wp_enqueue_script( 'jquery' );
-        wp_enqueue_script( 'wpwoo_wyrepay', $this->url_eorder.'woo/js/wyre.js', array( 'jquery' ));
-        wp_enqueue_script( 'wpwoo_wyrepay_inline', plugins_url( 'assets/woo-wyrepay.js', WPWOO_WYREPAY_BASE ), array( 'jquery', 'wpwoo_wyrepay' ));
+        wp_enqueue_script( 'wpwoo_wyre', $this->url_eorder.'woo/js/wyre.js', array( 'jquery' ));
+        wp_enqueue_script( 'wpwoo_wyre_inline', plugins_url( 'assets/wyre-woo.js', WPWOO_WYRE_BASE ), array( 'jquery', 'wpwoo_wyre' ));
 
     }
 
     /**
      * Get Wyre args
      **/
-    public function get_wyrepay_args( $order ) {
+    public function get_wyre_args( $order ) {
 
         $order_id = method_exists( $order, 'get_id' ) ? $order->get_id() : $order->id;
-        $wyrepay_args = array(
+        $wyre_args = array(
             'api_key' 		        =>  $this->api_key,
             'cur' 					=> get_woocommerce_currency(),
             'desc'					=> "Payment for Order #$order_id on ". get_bloginfo('name'),
@@ -143,17 +143,17 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
         $first_name  	= method_exists( $order, 'get_billing_first_name' ) ? $order->get_billing_first_name() : $order->billing_first_name;
         $last_name  	= method_exists( $order, 'get_billing_last_name' ) ? $order->get_billing_last_name() : $order->billing_last_name;
-        $wyrepay_args['name']=$first_name.' '.$last_name;
+        $wyre_args['name']=$first_name.' '.$last_name;
        
-        $wyrepay_args['email']=method_exists( $order, 'get_billing_email' ) ? $order->get_billing_email() : $order->billing_email;
-        $wyrepay_args['phone']=method_exists( $order, 'get_billing_phone' ) ? $order->get_billing_phone() : $order->billing_phone;
+        $wyre_args['email']=method_exists( $order, 'get_billing_email' ) ? $order->get_billing_email() : $order->billing_email;
+        $wyre_args['phone']=method_exists( $order, 'get_billing_phone' ) ? $order->get_billing_phone() : $order->billing_phone;
         $billing_address 	= $order->get_formatted_billing_address();
         $billing_address 	= esc_html( preg_replace( '#<br\s*/?>#i', ', ', $billing_address ) );
         $address_split= explode(',',$billing_address);
-        if(isset($address_split[1])) $wyrepay_args['address'] =$address_split[1];
-        if(isset($address_split[2])) $wyrepay_args['city'] =$address_split[2];
-        if(isset($address_split[3])) $wyrepay_args['state'] =$address_split[3];
-        if(isset($address_split[4])) $wyrepay_args['zipcode'] =$address_split[4];
+        if(isset($address_split[1])) $wyre_args['address'] =$address_split[1];
+        if(isset($address_split[2])) $wyre_args['city'] =$address_split[2];
+        if(isset($address_split[3])) $wyre_args['state'] =$address_split[3];
+        if(isset($address_split[4])) $wyre_args['zipcode'] =$address_split[4];
         
         $products = array();
 		if ( sizeof( $order->get_items() ) > 0 ) {
@@ -176,15 +176,15 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 			}
         }
 
-        $wyrepay_args['subtotal'] = number_format( $order->get_total() - round( $order->get_total_shipping() + $order->get_shipping_tax(), 2 ) + $order->get_total_discount(), 2, '.', '' );
-		$wyrepay_args['shipping_cost'] = number_format( $order->get_total_shipping() + $order->get_shipping_tax(), 2, '.', '' );
-		$wyrepay_args['tax_amount'] = $order->get_shipping_tax();
-        $wyrepay_args['total'] = $order->get_total();
-        $wyrepay_args['ordered_items'] = $products;
+        $wyre_args['subtotal'] = number_format( $order->get_total() - round( $order->get_total_shipping() + $order->get_shipping_tax(), 2 ) + $order->get_total_discount(), 2, '.', '' );
+		$wyre_args['shipping_cost'] = number_format( $order->get_total_shipping() + $order->get_shipping_tax(), 2, '.', '' );
+		$wyre_args['tax_amount'] = $order->get_shipping_tax();
+        $wyre_args['total'] = $order->get_total();
+        $wyre_args['ordered_items'] = $products;
         
-        $wyrepay_args = apply_filters( 'wpwoo_wyrepay_args', $wyrepay_args );
+        $wyre_args = apply_filters( 'wpwoo_wyre_args', $wyre_args );
 
-        return $wyrepay_args;
+        return $wyre_args;
     }
 
     /**
@@ -218,7 +218,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
         }
         else {	 ?>
-            <div class="inline error"><p><strong>Wyrepay Payment Gateway Disabled</strong>: <?php echo $this->msg ?></p></div>
+            <div class="inline error"><p><strong>Wyre Payment Gateway Disabled</strong>: <?php echo $this->msg ?></p></div>
 
         <?php }
 
@@ -259,11 +259,11 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
      **/
     public function get_payment_link( $order_id ) {
         $order = wc_get_order( $order_id );
-        $wyrepay_args = $this->get_wyrepay_args( $order );
-        $wyrepay_redirect  = $this->url."process_wp"; // Wyre Wordpress Order Endpoint ...
+        $wyre_args = $this->get_wyre_args( $order );
+        $wyre_redirect  = $this->url."process_wp"; // Wyre Wordpress Order Endpoint ...
 
-        $request = wp_remote_post($wyrepay_redirect, array(
-            'body' => $wyrepay_args
+        $request = wp_remote_post($wyre_redirect, array(
+            'body' => $wyre_args
         ));
 
         $valid_url = strpos( $request['body'], $this->url_eorder); // Check contains URL ...
@@ -304,7 +304,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             $url=$this->url_eorder.'pay/i/'.sanitize_text_field($_GET['e_order']);
             echo '<p>Thank you for your order, please click the '.$this->order_button_text.' button below to proceed.</p>';
             echo '<div>
-                    <form id="order_review" method="post" action="'. WC()->api_request_url( 'WPWOO_Wyrepay_Plugin' ) .'"></form>
+                    <form id="order_review" method="post" action="'. WC()->api_request_url( 'WPWOO_Wyre_Plugin' ) .'"></form>
                     <button class="button alt" onclick="wp_inline(\''.$url.'\',\''.$order->get_cancel_order_url().'\',\''.$this->get_return_url( $order ).'\')">'.$this->order_button_text.'</button> 
                     <a class="button cancel" href="' . esc_url( $order->get_cancel_order_url() ) . '">Cancel order</a>
                   </div>';
@@ -317,7 +317,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
         }
     }
 
-    public function check_wyrepay_response() {
+    public function check_wyre_response() {
 
         if( isset( $_POST['transaction'] ) ) {
 
@@ -386,7 +386,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
                         $order->payment_complete( $transaction_id );
 
                         //Add admin order note
-                        $order->add_order_note( 'Payment Via Wyrepay.<br />Transaction ID: '.$transaction_id );
+                        $order->add_order_note( 'Payment Via Wyre.<br />Transaction ID: '.$transaction_id );
 
                         $message = 'Payment was successful.';
                         $message_type = 'success';
@@ -398,12 +398,12 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
                     }
                 }
 
-                $wyrepay_message = array(
+                $wyre_message = array(
                     'message'		=> $message,
                     'message_type' 	=> $message_type
                 );
 
-                update_post_meta( $order_id, 'message', $wyrepay_message );
+                update_post_meta( $order_id, 'message', $wyre_message );
 
             } else {
 
@@ -418,12 +418,12 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
                 //Update the order status
                 $order->update_status( 'failed', '' );
 
-                $wyrepay_message = array(
+                $wyre_message = array(
                     'message'		=> $message,
                     'message_type' 	=> $message_type
                 );
 
-                update_post_meta( $order_id, 'message', $wyrepay_message );
+                update_post_meta( $order_id, 'message', $wyre_message );
                 add_post_meta( $order_id, 'transaction_id', $transaction_id, true );
                 echo "OK";
             }
