@@ -263,7 +263,9 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
             'body' => $wyrepay_args
         ));
 
-        if ( ! is_wp_error( $request )) {
+        $valid_url = strpos( $request['body'], $this->url_eorder); // Check contains URL ...
+        
+        if ( ! is_wp_error( $request ) && $valid_url !== false) {
             $redirect_url=$request['body'];
             $e_order=array_pop(explode('/',$redirect_url));
             $redirect_url=$order->get_checkout_payment_url( true ).'&e_order='.$e_order;
