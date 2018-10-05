@@ -239,7 +239,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
 
         } else {
 
-            if($response==-2) wc_add_notice( "Invalid configuration, confirm your merchant API Key", 'error' );
+            if($response==-2) wc_add_notice( "Invalid Plugin Configuration, Ask Merchant to Check API Key", 'error' );
             else if($response==-1) wc_add_notice( "Merchant API Key is incorrect", 'error' );
             else wc_add_notice( "Unable to complete payment request", 'error' );
            
