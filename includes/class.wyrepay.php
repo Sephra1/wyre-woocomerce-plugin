@@ -257,7 +257,7 @@ class WPWOO_Wyrepay_Plugin extends WC_Payment_Gateway {
     public function get_payment_link( $order_id ) {
         $order = wc_get_order( $order_id );
         $wyrepay_args = $this->get_wyrepay_args( $order );
-        $wyrepay_redirect  = $this->url."process";
+        $wyrepay_redirect  = $this->url."process_wp"; // Wyre Wordpress Order Endpoint ...
 
         $request = wp_remote_post($wyrepay_redirect, array(
             'body' => $wyrepay_args
