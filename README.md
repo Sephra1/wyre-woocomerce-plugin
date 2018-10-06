@@ -7,14 +7,11 @@
  - **License:** MIT - see below
  - **Contributors:** Dominic Damoah, Siba Yahaya, Opata Joshua, Daniel Sarpong-Duah
 
-<img src="/screens/1.png" alt="See it in action" width="200">
+## Screenshot 
+
+<img src="/screens/1.png" alt="See it in action" width="500">
 
 Accept payments on your WooCommerce store using Wyre.
-
-## Description
-
-
-Accept Mobile Money and Debit card payment directly on your store with the Wyre payment gateway for WooCommerce.
 
 #### Take Mobile Money and Debit card payments easily and directly on your store
 
