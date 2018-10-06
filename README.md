@@ -7,7 +7,7 @@
  - **License:** MIT - see below
  - **Contributors:** Dominic Damoah, Siba Yahaya, Opata Joshua, Daniel Sarpong-Duah
 
-![Screen 1](/screens/1.png | width=200)
+<img src="/screens/1.png" alt="See it in action" width="200">
 
 Accept payments on your WooCommerce store using Wyre.
 
