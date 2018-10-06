@@ -16,7 +16,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
         $this->order_button_text 	= 'Make Payment';
         $this->url 		         	= 'https://e-order.wyre.tech/sysapi/';
         $this->url_eorder 		    = 'https://e-order.wyre.tech/';
-        $this->notify_url        	= WC()->api_request_url( 'WPWOO_Wyre_Plugin' );
+        $this->notify_url        	= WC()->api_request_url( 'wyre_callback' );
         $this->method_title     	= 'Wyre';
         $this->method_description  	= 'Accept Mobile Money and Debit card payment directly on your store with the Wyre Tech payment gateway for WooCommerce.';
 
@@ -45,7 +45,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
         // Payment listener/API hook
         add_action( 'init', array( $this, 'check_wyre_response' ) );
-        add_action( 'woocommerce_api_WPWOO_Wyre_Plugin', array( $this, 'check_wyre_response' ) );
+        add_action( 'woocommerce_api_wyre_callback', array( $this, 'check_wyre_response' ) );
     }
 
     /**
@@ -305,7 +305,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
             $url=$this->url_eorder.'pay/i/'.sanitize_text_field($_GET['e_order']);
             echo '<p>Thank you for your order, please click the '.$this->order_button_text.' button below to proceed.</p>';
             echo '<div>
-                    <form id="order_review" method="post" action="'. WC()->api_request_url( 'WPWOO_Wyre_Plugin' ) .'"></form>
+                    <form id="order_review" method="post" action="'. WC()->api_request_url( 'wyre_callback' ) .'"></form>
                     <button class="button alt" onclick="wp_inline(\''.$url.'\',\''.$order->get_cancel_order_url().'\',\''.$this->get_return_url( $order ).'\')">'.$this->order_button_text.'</button> 
                     <a class="button cancel" href="' . esc_url( $order->get_cancel_order_url() ) . '">Cancel order</a>
                   </div>';
@@ -320,6 +320,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
     public function check_wyre_response() {
 
+        die("It worked");
         error_log("Hey there. SEE the CALLBACK");
         error_log(json_encode($_POST));
         if( isset( $_POST['transaction'] ) ) {
