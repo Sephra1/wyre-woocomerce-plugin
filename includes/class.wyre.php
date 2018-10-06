@@ -62,9 +62,9 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
                 'desc_tip'    => true
             ),
             'api_key' => array(
-                'title' 		=> 'Wyre API Key',
+                'title' 		=> 'Merchant API Key',
                 'type' 			=> 'text',
-                'description' 	=> 'Enter Your Wyre API Key, this can be gotten on your settings page when you login on Wyre at https://my.wyre.tech' ,
+                'description' 	=> 'Enter Your Merchant API Key, this can be gotten on your settings page when you login on Wyre at https://my.wyre.tech' ,
                 'default' 		=> '',
                 'desc_tip'      => true
             ),
