@@ -100,7 +100,7 @@ function wpwoo_admin_notices() {
 
     // Check required fields
     if ( empty($settings['api_key'])) {
-        echo '<div class="error"><p>' . sprintf( 'Please enter your Wyre API Key <a href="%s">here</a> to be able to use the payment plugin.', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wyre-woocommerce-plugin' ) ) . '</p></div>';
+        echo '<div class="error"><p>' . sprintf( 'Please enter your Wyre API Key <a href="%s">here</a> to be able to use the payment plugin.', admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wyre-woo-plugin' ) ) . '</p></div>';
         return;
     }
 
