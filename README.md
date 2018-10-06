@@ -1,13 +1,15 @@
 # WooCommerce - Wyre Payment Gateway
 
- - **Contributors:** Dominic Damoah, Siba Yahaya, Opata Joshua, Daniel Sarpong-Duah
  - **Tags:** Wyre, woocommerce, payment gateway, bank account, credit card, debit card, ghana, mobile money, international, mastercard, visa
  - **Requires at least:** 4.4
  - **Tested up to:** 4.6
  - **Stable tag:** 0.0.1
  - **License:** MIT - see below
+ - **Contributors:** Dominic Damoah, Siba Yahaya, Opata Joshua, Daniel Sarpong-Duah
 
-Accept payments on your store using Wyre.
+![Screen 1](/screens/1.png)
+
+Accept payments on your WooCommerce store using Wyre.
 
 ## Description
 
