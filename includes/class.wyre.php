@@ -44,6 +44,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
         add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 
         // Payment listener/API hook
+        add_action( 'init', array( $this, 'check_wyre_response' ) );
         add_action( 'woocommerce_api_WPWOO_Wyre_Plugin', array( $this, 'check_wyre_response' ) );
     }
 
@@ -319,6 +320,8 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
     public function check_wyre_response() {
 
+        error_log("Hey there. SEE the CALLBACK");
+        error_log(json_encode($_POST));
         if( isset( $_POST['transaction'] ) ) {
 
             $transaction = $_POST['transaction'];
