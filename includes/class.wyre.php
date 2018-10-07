@@ -322,12 +322,11 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
         $jsonStr = file_get_contents("php://input"); //read the HTTP body.
         $data = json_decode($jsonStr);
-        error_log("See the data I got ...".$jsonStr);
-        if( isset( $data['order_id'] ) ) {
+        if( isset( $data->order_id ) ) {
             error_log("Processing order ...");
-            $order_id = (int) $data['order_id'];
-            $transaction_id = $data['wyre_tracker'];
-            $status_msg = $data["message"];
+            $order_id = (int) $data->order_id;
+            $transaction_id = $data->wyre_tracker;
+            $status_msg = $data->message;
 
             $order = wc_get_order($order_id);
 
@@ -367,7 +366,6 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
                 add_post_meta( $order_id, 'transaction_id', $transaction_id, true );
                 echo "OK";
             }
-
         } 
         else 
         {
