@@ -321,7 +321,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
     public function check_wyre_response() {
 
         if( isset( $_POST['order_id'] ) ) {
-
+            error_log("Processing order ...");
             $order_id = (int) $_POST['order_id'];
             $transaction_id = $_POST['wyre_tracker'];
             $status_msg = $_POST["message"];
@@ -329,7 +329,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
             $order = wc_get_order($order_id);
 
             if( $_POST['status'] == 'Paid' ) {
-
+                error_log("EOrder was paid");
                 $order->payment_complete( $transaction_id );
                 //Add admin order note
                 $order->add_order_note( 'Payment Via Wyre.<br />Transaction ID: '.$transaction_id );
@@ -346,6 +346,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
             } else {
                 // It Failed
+                error_log("EOrder failed unfortunately");
                 $message = 'Payment failed.';
                 $message_type = 'error';
 
@@ -364,7 +365,12 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
                 echo "OK";
             }
 
-        } else echo 'Failed to process';
+        } 
+        else 
+        {
+            echo 'Failed to process';
+            error_log("An error occurred. Values did not arrive ...");
+        }
         die();
     }
 }
