@@ -333,6 +333,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
             if( $data->status == 'Paid' ) {
                 error_log("EOrder was paid");
                 $order->payment_complete( $transaction_id );
+                $order->payment_complete();
                 //Add admin order note
                 $order->add_order_note( 'Payment Via Wyre.<br />Transaction ID: '.$transaction_id );
                 $message = 'Payment was successful.';
