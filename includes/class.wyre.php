@@ -193,16 +193,16 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
      */
     public function admin_options() { ?>
         <h2>Wyre Settings <a href="https://my.wyre.tech/settings" target="_blank" style="
-    line-height: 0;
-    background: white;
-    padding: 8px;
-    padding-left: 14px;
-    padding-right: 14px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    box-shadow: 0px 0px 1px;
-">Open My Settings</a>
+                        line-height: 0;
+                        background: white;
+                        padding: 8px;
+                        padding-left: 14px;
+                        padding-right: 14px;
+                        border-radius: 5px;
+                        text-decoration: none;
+                        font-size: 14px;
+                        box-shadow: 0px 0px 1px;
+                    ">Open My Settings</a>
             <?php
             if ( function_exists( 'wc_back_link' ) ) {
                 wc_back_link( 'Return to payments', admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
@@ -293,7 +293,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
     }
 
     /**
-     * Displays the payment page [TODO]
+     * Displays the payment page
      */
     public function receipt_page( $order_id ) {
  
@@ -318,6 +318,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
         }
     }
 
+    // Last item to look at ... Comming soon
     public function check_wyre_response() {
 
         die(json_encode($_POST));
