@@ -370,6 +370,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
         {
             echo 'Failed to process';
             error_log("An error occurred. Values did not arrive ...");
+            error_log(json_encode($_POST));
         }
         die();
     }
