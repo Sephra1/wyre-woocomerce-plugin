@@ -320,7 +320,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
     public function check_wyre_response() {
 
-        die("It worked");
+        die(json_encode($_POST));
         error_log("Hey there. SEE the CALLBACK");
         error_log(json_encode($_POST));
         if( isset( $_POST['transaction'] ) ) {

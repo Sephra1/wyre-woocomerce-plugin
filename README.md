@@ -19,9 +19,9 @@ Signup for an account [here](https://my.wyre.tech/auth/signup)
 
 Wyre is available in:
 
-* __UK__
-* __US__
-* __Ghana__
+* __UK__ (GBP)
+* __US__ (USD)
+* __Ghana__ (GHS)
 
 ## Installation
 
