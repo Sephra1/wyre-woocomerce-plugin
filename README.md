@@ -3,7 +3,7 @@
  - **Tags:** Wyre, woocommerce, payment gateway, bank account, credit card, debit card, ghana, mobile money, international, mastercard, visa
  - **Requires at least:** 4.4
  - **Tested up to:** 4.6
- - **Stable tag:** 0.0.1
+ - **Stable tag:** 1.0.0
  - **License:** MIT - see below
  - **Contributors:** Dominic Damoah, Siba Yahaya, Opata Joshua, Daniel Sarpong-Duah
 
