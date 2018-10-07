@@ -66,7 +66,7 @@ To contribute, fork the repo, add your changes and modifications then create a p
 
 ##### MIT License
 
-Copyright (c) 2018 Wyrenologies
+Copyright (c) 2018 Wyre Technologies LLC.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
