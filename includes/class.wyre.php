@@ -330,7 +330,7 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
             $order = wc_get_order($order_id);
 
-            if( $data['status'] == 'Paid' ) {
+            if( $data->status == 'Paid' ) {
                 error_log("EOrder was paid");
                 $order->payment_complete( $transaction_id );
                 //Add admin order note
