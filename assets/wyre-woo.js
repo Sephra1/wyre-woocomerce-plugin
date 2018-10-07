@@ -5,7 +5,7 @@ var func_return_obj=function () {
      processed=1;
       setTimeout(function(){
          window.location=return_url;
-       },5000);
+       },1000);
 }
 
 var cancel_url;
