@@ -318,107 +318,45 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
         }
     }
 
-    // Last item to look at ... Comming soon
     public function check_wyre_response() {
 
+        error_log("Hey WHEW!");
+        error_log(json_encode($_POST));
         die(json_encode($_POST));
         error_log("Hey there. SEE the CALLBACK");
         error_log(json_encode($_POST));
-        if( isset( $_POST['transaction'] ) ) {
 
-            $transaction = $_POST['transaction'];
-            
-            foreach($transaction as $key =>$val) $transaction[$key]=sanitize_text_field($val);
-            
-            $transaction_id = $transaction['transaction_id'];
-            $order_id 		= (int) $transaction['order_id'];
-            $order 			= wc_get_order($order_id);
-            $order_total	= $order->get_total();
-            $amount_paid_currency 	= $transaction['currency'];
-            $amount_paid = $transaction['amount_paid'];
+        if( isset( $_POST['order_id'] ) ) {
 
-            if( $transaction['status'] == 'Approved' ) {
+            $order_id = (int) $_POST['order_id'];
+            $transaction_id = $_POST['wyre_tracker'];
+            $status_msg = $_POST["message"];
 
-                if( $transaction['merchant_id'] != $this->merchant_id && $transaction['merchant_id']!='demo' ) {
+            $order = wc_get_order($order_id);
 
-                    //Update the order status
-                    $order->update_status('on-hold', ''); 
+            if( $_POST['status'] == 'Paid' ) {
 
-                    //Error Note
-                    $message = 'Thank you for shopping with us.<br />Your payment transaction was successful, but the amount was paid to the wrong merchant account. <br />Your order is currently on-hold.<br />Kindly contact us for more information regarding your order and payment status.';
-                    $message_type = 'notice';
-
-                    //Add Admin Order Note
-                    $order->add_order_note('Look into this order. <br />This order is currently on hold.<br />Reason: Possible fradulent attempt. Transaction ID: '.$transaction_id);
-
-                    add_post_meta( $order_id, 'transaction_id', $transaction_id, true );
-
-                    // Reduce stock levels
-                    $order->reduce_order_stock();
-
-                    // Empty cart
-                    wc_empty_cart();
-
-                    echo 'Merchant ID mis-match';
-
-                } else {
-
-                    // check if the amount paid is equal to the order amount.
-                    if( $amount_paid < $order_total ) {
-
-                        //Update the order status
-                        $order->update_status( 'on-hold', '' );
-
-                        //Error Note
-                        $message = 'Thank you for shopping with us.<br />Your payment transaction was successful, but the amount paid is not the same as the total order amount.<br />Your order is currently on-hold.<br />Kindly contact us for more information regarding your order and payment status.';
-                        $message_type = 'notice';
-
-                        //Add Admin Order Note
-                        $order->add_order_note('Look into this order. <br />This order is currently on hold.<br />Reason: Amount paid is less than the total order amount.<br />Amount Paid was '.$amount_paid_currency.' '.$amount_paid.' while the total order amount is '.$amount_paid_currency.' '.$order_total.'<br />Wyre Transaction ID: '.$transaction_id);
-
-                        add_post_meta( $order_id, 'transaction_id', $transaction_id, true );
-
-                        // Reduce stock levels
-                        $order->reduce_order_stock();
-
-                        // Empty cart
-                        wc_empty_cart();
-
-                        echo 'Total amount mis-match';
-
-                    } else {
-
-                        $order->payment_complete( $transaction_id );
-
-                        //Add admin order note
-                        $order->add_order_note( 'Payment Via Wyre.<br />Transaction ID: '.$transaction_id );
-
-                        $message = 'Payment was successful.';
-                        $message_type = 'success';
-
-                        // Empty cart
-                        wc_empty_cart();
-
-                        echo 'OK';
-                    }
-                }
-
+                $order->payment_complete( $transaction_id );
+                //Add admin order note
+                $order->add_order_note( 'Payment Via Wyre.<br />Transaction ID: '.$transaction_id );
+                $message = 'Payment was successful.';
+                $message_type = 'success';
+                // Empty cart
+                wc_empty_cart();
+                echo 'OK';
                 $wyre_message = array(
                     'message'		=> $message,
                     'message_type' 	=> $message_type
                 );
-
                 update_post_meta( $order_id, 'message', $wyre_message );
 
             } else {
-
+                // It Failed
                 $message = 'Payment failed.';
                 $message_type = 'error';
 
-                $transaction_id = $transaction['transaction_id'];
-
                 //Add Admin Order Note
-                $order->add_order_note($message.'<br />Wyre Transaction ID: '.$transaction_id.'<br/>Reason: '.$transaction['response_message']);
+                $order->add_order_note($message.'<br />Wyre Transaction ID: '.$transaction_id.'<br/>Reason: '.$status_msg);
 
                 //Update the order status
                 $order->update_status( 'failed', '' );
@@ -427,14 +365,12 @@ class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
                     'message'		=> $message,
                     'message_type' 	=> $message_type
                 );
-
                 update_post_meta( $order_id, 'message', $wyre_message );
                 add_post_meta( $order_id, 'transaction_id', $transaction_id, true );
                 echo "OK";
             }
 
         } else echo 'Failed to process';
-
         die();
     }
 }
