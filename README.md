@@ -9,7 +9,7 @@
 
 ## Screenshot 
 
-<img src="/screens/1.png" alt="See it in action" width="500">
+<img src="/screens/3.png" alt="See it in action" width="500">
 
 Accept payments on your WooCommerce store using Wyre.
 
