@@ -7,7 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WPWOO_Wyre_Plugin extends WC_Payment_Gateway {
 
     public $allowed_currencies=array('GHS');
-
     public function __construct(){
        
         $this->id 					= 'wyre-woo-plugin';
