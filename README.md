@@ -46,7 +46,6 @@ Wyre is available in:
 
 For FTP manual installation, [check here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
 
-
 ### Configure the plugin
 To configure the plugin, go to __WooCommerce > Settings__ from the left menu, click __Checkout__ tab. Click on __Wyre__.
 
