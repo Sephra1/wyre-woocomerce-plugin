@@ -15,7 +15,7 @@ Accept payments on your WooCommerce store using Wyre.
 
 #### Take Mobile Money and Debit card payments easily and directly on your store
 
-Signup for an account [here](https://my.wyre.tech/auth/signup)
+Signup for an account [here](https://my.wyre.tech/signup)
 
 Wyre is available in:
 
